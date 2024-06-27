@@ -1,0 +1,558 @@
+{
+	"info": {
+		"_postman_id": "e794fde5-8e41-4549-8f28-ae1a0d05ce2b",
+		"name": "Paylocity.QA.API.Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9392610"
+	},
+	"item": [
+		{
+			"name": "SetUp",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/Prod/Account/Login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Prod",
+								"Account",
+								"Login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tests",
+			"item": [
+				{
+					"name": "GetEmployeeList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test to check if the status code is 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Test to check if the response is valid, has a body, and is in JSON format\r",
+									"pm.test(\"Valid response with body in JSON format\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"    pm.response.to.have.body();\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"// Parse the response body as JSON\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"// Test to check if the first value's firstName is 'Dawn'\r",
+									"pm.test(\"First value's firstName is 'Dawn'\", function () {\r",
+									"    pm.expect(responseJson[0].firstName).to.eql(\"Dawn\");\r",
+									"});\r",
+									"\r",
+									"// Test to check if the first value's id is '840b0d2a-14e5-4d6e-9786-61e98809bffa'\r",
+									"pm.test(\"First value's id is '840b0d2a-14e5-4d6e-9786-61e98809bffa'\", function () {\r",
+									"    pm.expect(responseJson[0].id).to.eql(\"840b0d2a-14e5-4d6e-9786-61e98809bffa\");\r",
+									"});\r",
+									"\r",
+									"// Test to check if one of the ids in the response is '840b0d2a-14e5-4d6e-9786-61e98809bffa'\r",
+									"pm.test(\"One of the IDs is '840b0d2a-14e5-4d6e-9786-61e98809bffa'\", function () {\r",
+									"    const hasSpecificId = responseJson.some(item => item.id === \"840b0d2a-14e5-4d6e-9786-61e98809bffa\");\r",
+									"    pm.expect(hasSpecificId).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/Prod/api/employees",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Prod",
+								"api",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddEmployee",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Verify Added data\", function () {\r",
+									"    pm.test(\"Verify firstName is correct\", function () {\r",
+									"        pm.expect(responseJson.firstName).to.eql(firstName);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Verify lastName is correct\", function () {\r",
+									"        pm.expect(responseJson.lastName).to.eql(lastNameName);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// get generated uuid and set as global variable to reuse it\r",
+									"const uniqueId = jsonData.id;\r",
+									"pm.globals.set(\"uniqueId\", uniqueId);\r",
+									"console.log(\"UUID set as global variable:\", uniqueId);\r",
+									"\r",
+									"const firstName = jsonData.firstName;\r",
+									"pm.globals.set(\"firstName\", firstName);\r",
+									"console.log(\"FirstName set as global variable:\", firstName);\r",
+									"\r",
+									"const lastName = jsonData.lastName;\r",
+									"pm.globals.set(\"lastName\", lastName);\r",
+									"console.log(\"LastName set as global variable:\", lastName);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generate a unique string using current date-time\r",
+									"function generateUniqueString() {\r",
+									"    return new Date().toISOString().replace(/[-:.TZ]/g, '');\r",
+									"}\r",
+									"\r",
+									"// Generate unique first name and last name\r",
+									"const firstName = `FirstName_${generateUniqueString()}`;\r",
+									"const lastName = `LastName_${generateUniqueString()}`;\r",
+									"console.log('Generated unique firstName:', firstName);\r",
+									"\r",
+									"// Set the unique names as global variables\r",
+									"pm.globals.set('firstName', firstName);\r",
+									"pm.globals.set('lastName', lastName);\r",
+									"console.log('Generated unique lastName:', lastName);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"dependants\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/Prod/api/employees",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Prod",
+								"api",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetEmployee employeeID={{uniqueId}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify firstName is correct\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.firstName).to.eql(\"{{firstName}}\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify lastName is correct\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.lastName).to.eql(\"{{lastName}}\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify id is correct\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(\"{{uniqueId}}\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/Prod/api/employees/{{uniqueId}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Prod",
+								"api",
+								"employees",
+								"{{uniqueId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateEmployee",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract the response JSON\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"// Expected values\r",
+									"const expectedFirstName = pm.environment.get(\"{{firstName}}\");\r",
+									"const expectedLastName = pm.environment.get(\"{{lastName}}\");\r",
+									"const expectedId = pm.environment.get(\"{{uniqueId}}\");\r",
+									"\r",
+									"// Verify the id in the response matches the added id\r",
+									"pm.test(\"Verify id is correct\", function () {\r",
+									"    pm.expect(responseJson.id).to.eql(\"{{uniqueId}}\");\r",
+									"});\r",
+									"\r",
+									"// Verify the firstName and lastName are updated correctly\r",
+									"pm.test(\"Verify firstName is updated\", function () {\r",
+									"    pm.expect(responseJson.firstName).to.eql(expectedFirstName);\r",
+									"});\r",
+									"pm.test(\"Verify lastName is updated\", function () {\r",
+									"    pm.expect(responseJson.lastName).to.eql(expectedLastName);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{uniqueId}}\",\r\n    \"firstName\": \"updated_{{firstName}}\",\r\n    \"lastName\": \"updated_{{lastName}}\",\r\n    \"dependants\": \"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/Prod/api/employees",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Prod",
+								"api",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteEmployee EmployeeID={{uniqueId}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Optionally, verify the response message or other details if provided by your API\r",
+									"pm.test(\"Response message is as expected\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"Resource deleted successfully\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/Prod/api/employees/{{uniqueId}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Prod",
+								"api",
+								"employees",
+								"{{uniqueId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.environment.get(\"URL\");"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    console.log(\"Status code verified\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 6000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(6000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    console.log(\"response header verified\");\r",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "TearDown",
+			"item": [
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 302\", function () {\r",
+									"    pm.response.to.have.status(302);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Location header is present\", function () {\r",
+									"    pm.expect(pm.response.headers.get('Location')).to.not.be.undefined;\r",
+									"});\r",
+									"pm.test(\"Redirect URL is correct\", function () {\r",
+									"    pm.expect(pm.response.headers.get('Location')).to.equal('/Prod/Account/Login');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/Prod/Account/LogOut",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Prod",
+								"Account",
+								"LogOut"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"// Get the token from environment variable\r",
+					"const token = pm.environment.get(\"token\");\r",
+					"console.log(\"Toekne:\", token);\r",
+					"\r",
+					"// Encode the token if needed (assuming token is already base64 encoded)\r",
+					"const authorizationHeader = `Basic ${token}`;\r",
+					"\r",
+					"// Set the Authorization header for all requests in the collection\r",
+					"pm.collectionVariables.set(\"Authorization\", authorizationHeader);\r",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Authorization",
+			"value": ""
+		}
+	]
+}

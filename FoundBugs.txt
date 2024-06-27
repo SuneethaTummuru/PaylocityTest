@@ -1,0 +1,91 @@
+###found bugs - Im addressing them generally since I don't have time to address them like a normal bugs()with title, description, steps, screenshots..etc
+
+1.Pages are not responsive
+
+2.Enter correct username but wrong password and try to login
+The login attempt fails, but the response status code does not reflect the authentication failure.
+Actual status code: 200
+Expected status code: 401 unauthorized
+
+3.Dont enter any username and password and click LogIn button
+Actual - wrong status code 200
+Expected - 401 unauthorized
+
+3.Enter correct password and wrong username
+Actual results : you see is broken page with the message, page is not working - with 405 method not allowed
+Expected results: - status code 401,
+
+4.Enter correct username and pwd then login
+Actual results - 302 status code
+Expected - 200 status code
+
+5.After login employees endpoint returns list of existing employee details but the application shows switched FN and LN
+
+6.Click Add Employee button on paylocity benefits dashboard
+Add employee popup window opens, Don't fill any details and then click ADD button
+Actual Results/current behavior: Status code 401 unauthorized. 
+On the UI it doesn't show any information to the user
+Expected - 400 bad request with message in reponse body - missing required fields
+On the UI - its needed to show FN, LN and dependents are required fields
+
+7.Click Add Employee button on paylocity benefits dashboard
+Add employee popup window opens, fill one of those fields(either FN or LN or dependents)
+Actual Results/current behavior: Status code 401 unauthorized. 
+On the UI it doesn't show any information to the user
+Expected - 400 bad request with message in reponse body - missing required fields
+On the UI - its needed to show FN, LN and dependents are required fields
+
+8.Fill all the 3 fields with special characters and click ADD
+Actual Results/current behavior: Status code 401 unauthorized. 
+On the UI it doesn't show any information to the user
+Expected - 400 bad request with message in reponse body - invalid characters in fields
+On the UI - its needed to show proper validation message to users
+
+9.Fill all the 3 fields with correct data without any special characters(ex: FN: iuiuio, LN:hiuii, dependents:2) and click ADD
+Actual Results/current behavior: Status code 401 unauthorized. 
+On the UI it doesn't show any information to the user and page is not responding 
+Expected results: It should reopend to the correct data and data should be added
+
+10.Refresh the page when popup window opens or Close the add employee popup window and refresh
+Actual results : Existing data is not shown in the table and logout button disappeared
+Endpoint returns 401 unauthorized
+Expected : Existing data should be shown correctly in the table with logout button and status code 200
+
+11.After refresh - click back button and try to add an employee ..etc
+Actual results - resubmit the form message without any UI data
+Expected - we should navigate to the previous page
+
+12.Try to open the login page again , re-login with correct username and password, add en employee with correct data
+Actual results: in the table firstname value is placed in lastname column and vise versa
+Expected: they place in the table properly
+
+13.Enter the field dependents with value greater than 32 and less than 0
+Actual results: On UI it shows no validations
+Expected: It should show proper validation messages
+
+14.If the table is empty  and when you add the data , data is inserting in ASC order on firstname value
+but if the data is already there in the table - existing data is not properly sorted
+Expected: Data should be sorted properly on atleast one column even with or without existing data
+
+15.Enter the fields with FN,LN values greater than 50 characters
+Actual - on UI , it shows no validation msg
+Expected it should show - it should allow maximum of 50 characters
+
+
+16.After deleting the employee - it would be nice to show the user Emplye "XXX" has been deleted successfully
+
+17.I see the application allows employees with same data
+18.there is no easy way to search for a specific employee based on FN or LN..etc
+19.IT would be nice to have to implement sortig on FN, LN columns
+20.IF there are many employees, pagination is recommended for performance of the application
+
+21.After logout when you click the back arrow on the tab
+Actual - Im able to see the benefits dashboard page,, i.e logged into the application without proper login mechanism
+Expected: We shouldn't let users to login without antering credentials
+
+22.NetPay calculations are not showing properly
+For ex: actual = 1923.08
+Expected = 1923.07
+
+23.The application is working with predefined values like gross pay, it would be nice if it would let us enter the employee salary also along with employee details
+
